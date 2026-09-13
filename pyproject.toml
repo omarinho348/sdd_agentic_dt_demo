@@ -1,0 +1,25 @@
+[project]
+name = "sdd-agentic-dt-demo"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+authors = [
+    { name = "omarinho348", email = "omar2301277@miuegypt.edu.eg" }
+]
+requires-python = ">=3.13"
+dependencies = [
+    "glfw>=2.10.2",
+    "moderngl>=5.12.0",
+    "openai>=3.13.0",
+    "pydantic>=2.13.5",
+    "pyopengl>=3.1.10",
+    "python-dotenv>=1.2.3",
+    "simpy>=4.1.2",
+]
+
+[project.scripts]
+sdd-agentic-dt-demo = "sdd_agentic_dt_demo:main"
+
+[build-system]
+requires = ["uv_build>=0.12.13,<0.13.0"]
+build-backend = "uv_build"
