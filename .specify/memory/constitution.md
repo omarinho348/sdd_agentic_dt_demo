@@ -1,50 +1,69 @@
-# [PROJECT_NAME] Constitution
-<!-- Example: Spec Constitution, TaskFlow Constitution, etc. -->
+<!--
+Sync Impact Report
+- Version change: template/unversioned -> 1.0.0
+- Modified principles: template placeholders replaced with three TwinIt principles
+- Added sections: project constraints and development workflow
+- Removed sections: none
+- Templates requiring updates: .specify/templates/plan-template.md (updated),
+	.specify/templates/spec-template.md (updated), .specify/templates/tasks-template.md (updated)
+- Follow-up TODOs: none
+-->
+
+# TwinIt Constitution
 
 ## Core Principles
 
-### [PRINCIPLE_1_NAME]
-<!-- Example: I. Library-First -->
-[PRINCIPLE_1_DESCRIPTION]
-<!-- Example: Every feature starts as a standalone library; Libraries must be self-contained, independently testable, documented; Clear purpose required - no organizational-only libraries -->
+### I. Token & Execution Guardrails
+All agent prompts and dynamic code generation MUST use `gpt-4o-mini` exclusively. The
+implementation MUST avoid heavy agent frameworks, including LangChain, AutoGen, and
+CrewAI, and use standard Python scripts, the OpenAI SDK, and Pydantic validation.
+Prompts MUST be dense and bounded; generated structured data MUST use Pydantic
+validation or `response_format={"type": "json_object"}` rather than open-ended text.
+This keeps execution predictable, auditable, and economical.
 
-### [PRINCIPLE_2_NAME]
-<!-- Example: II. CLI Interface -->
-[PRINCIPLE_2_DESCRIPTION]
-<!-- Example: Every library exposes functionality via CLI; Text in/out protocol: stdin/args → stdout, errors → stderr; Support JSON + human-readable formats -->
+### II. Architectural Boundaries
+The model topology MUST remain a two-station linear assembly line: `Queue` ->
+`Assembly Station` -> `Packaging Station`. SimPy simulation MUST run on a background
+daemon `threading.Thread`, while the PyOpenGL rendering loop MUST run on the main
+thread. Inter-thread communication MUST use thread-safe Python `queue.Queue`
+instances exclusively; components MUST NOT mutate shared state directly. These
+boundaries preserve simulation determinism and keep rendering responsive.
 
-### [PRINCIPLE_3_NAME]
-<!-- Example: III. Test-First (NON-NEGOTIABLE) -->
-[PRINCIPLE_3_DESCRIPTION]
-<!-- Example: TDD mandatory: Tests written → User approved → Tests fail → Then implement; Red-Green-Refactor cycle strictly enforced -->
+### III. Spec-Driven Contract Primacy
+Generated DTDL v3 JSON schemas MUST be the single source of truth for downstream
+SimPy code generation and dashboard properties. Every generated DTDL schema MUST
+pass Pydantic validation before it is saved to `assembly_line.json`. Code and
+dashboard changes MUST follow the validated contract rather than creating parallel
+property definitions. This prevents drift between the digital-twin model and its
+consumers.
 
-### [PRINCIPLE_4_NAME]
-<!-- Example: IV. Integration Testing -->
-[PRINCIPLE_4_DESCRIPTION]
-<!-- Example: Focus areas requiring integration tests: New library contract tests, Contract changes, Inter-service communication, Shared schemas -->
+## Additional Constraints
 
-### [PRINCIPLE_5_NAME]
-<!-- Example: V. Observability, VI. Versioning & Breaking Changes, VII. Simplicity -->
-[PRINCIPLE_5_DESCRIPTION]
-<!-- Example: Text I/O ensures debuggability; Structured logging required; Or: MAJOR.MINOR.BUILD format; Or: Start simple, YAGNI principles -->
+- The implementation MUST target Python 3.13 or newer and use the project’s declared
+	OpenAI, Pydantic, SimPy, GLFW, ModernGL, and PyOpenGL dependencies where applicable.
+- Features MUST preserve the two-station topology and MUST NOT introduce an additional
+	station or an alternative orchestration framework without a constitution amendment.
+- Contract-producing workflows MUST retain the generated artifact at
+	`assembly_line.json` after validation.
 
-## [SECTION_2_NAME]
-<!-- Example: Additional Constraints, Security Requirements, Performance Standards, etc. -->
+## Development Workflow
 
-[SECTION_2_CONTENT]
-<!-- Example: Technology stack requirements, compliance standards, deployment policies, etc. -->
-
-## [SECTION_3_NAME]
-<!-- Example: Development Workflow, Review Process, Quality Gates, etc. -->
-
-[SECTION_3_CONTENT]
-<!-- Example: Code review requirements, testing gates, deployment approval process, etc. -->
+- Feature specifications and implementation plans MUST include a Constitution Check
+	covering model topology, thread ownership, queue-based communication, model choice,
+	prompt output constraints, and DTDL/Pydantic validation.
+- Tasks that generate or consume digital-twin contracts MUST identify the contract file
+	and validation step explicitly.
+- Changes MUST be validated with focused tests or checks for the affected behavior;
+	contract changes MUST include schema validation coverage.
 
 ## Governance
-<!-- Example: Constitution supersedes all other practices; Amendments require documentation, approval, migration plan -->
+This constitution supersedes conflicting project practices. Every feature plan and
+review MUST verify compliance with the Core Principles and record any justified
+exception. Amendments require a documented rationale, an updated Sync Impact Report,
+and propagation to affected Spec Kit templates or guidance. Versioning follows
+semantic versioning: MAJOR for incompatible principle changes or removals, MINOR for
+new or materially expanded requirements, and PATCH for clarifications or wording-only
+changes. Compliance MUST be reviewed at planning, implementation, and contract
+validation checkpoints.
 
-[GOVERNANCE_RULES]
-<!-- Example: All PRs/reviews must verify compliance; Complexity must be justified; Use [GUIDANCE_FILE] for runtime development guidance -->
-
-**Version**: [CONSTITUTION_VERSION] | **Ratified**: [RATIFICATION_DATE] | **Last Amended**: [LAST_AMENDED_DATE]
-<!-- Example: Version: 2.1.1 | Ratified: 2025-06-13 | Last Amended: 2025-07-16 -->
+**Version**: 1.0.0 | **Ratified**: 2026-09-14 | **Last Amended**: 2026-09-14

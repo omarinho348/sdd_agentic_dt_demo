@@ -93,6 +93,15 @@
 - **FR-004**: System MUST [data requirement, e.g., "persist user preferences"]
 - **FR-005**: System MUST [behavior, e.g., "log all security events"]
 
+### Constitutional Constraints
+
+- **CC-001**: The feature MUST preserve the `Queue` -> `Assembly Station` -> `Packaging
+  Station` topology and the prescribed thread/queue ownership boundaries.
+- **CC-002**: Any generated DTDL v3 contract MUST be Pydantic-validated before being
+  saved to `assembly_line.json`.
+- **CC-003**: Any agent prompt or dynamic code generation MUST target `gpt-4o-mini`
+  and request bounded JSON output.
+
 *Example of marking unclear requirements:*
 
 - **FR-006**: System MUST authenticate users via [NEEDS CLARIFICATION: auth method not specified - email/password, SSO, OAuth?]

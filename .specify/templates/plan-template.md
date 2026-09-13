@@ -40,7 +40,13 @@
 
 *GATE: Must pass before Phase 0 research. Re-check after Phase 1 design.*
 
-[Gates determined based on constitution file]
+- LLM and generation: all agent prompts and dynamic code generation use `gpt-4o-mini`,
+  with bounded JSON output validated by Pydantic or JSON response format.
+- Architecture: the design preserves `Queue` -> `Assembly Station` -> `Packaging Station`,
+  uses a daemon SimPy thread, a main-thread PyOpenGL loop, and `queue.Queue` for all
+  inter-thread communication.
+- Contract: generated DTDL v3 is the source of truth, and validation occurs before
+  writing `assembly_line.json`.
 
 ## Project Structure
 
