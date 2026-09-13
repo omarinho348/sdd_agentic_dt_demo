@@ -15,7 +15,31 @@ uv sync
 $env:OPENAI_API_KEY = "<your-key>"
 ```
 
-## Complete input validation
+## Browser workflow
+
+From the repository root, start the local application:
+
+```powershell
+uv run python src/web_app.py
+```
+
+Open <http://127.0.0.1:8000> in a browser. Enter a complete description or select
+**Use a sample**, then select **Generate model**. For partial descriptions, the page
+reveals the missing values in the same form. After valid completion, inspect the three
+interface cards and select **Download JSON** to save the validated contract.
+
+Expected result: the page shows Queue, Station1 or the extracted first station name,
+and Station2 or the extracted second station name, with their required properties and
+telemetry. The server also writes `assembly_line.json` in the repository root.
+
+## Browser API checks
+
+The browser calls these local endpoints:
+
+- `POST /api/extract`: extracts parameters and returns missing fields without persistence.
+- `POST /api/generate`: validates completed parameters, writes the contract, and returns the document.
+
+## Compatibility CLI: complete input validation
 
 ```powershell
 python src/dtdl_generator.py "Assembly line with station1 cycle time 5s, station2 cycle time 8s, and queue size 3"
@@ -23,7 +47,7 @@ python src/dtdl_generator.py "Assembly line with station1 cycle time 5s, station
 
 Expected result: the command exits successfully without missing-parameter prompts and creates `assembly_line.json` containing exactly Queue, Station1, and Station2 interfaces.
 
-## Partial input validation
+## Compatibility CLI: partial input validation
 
 ```powershell
 "2.5`n3.0`n3" | python src/dtdl_generator.py "Create a line with assembly and packaging stations."
@@ -44,3 +68,9 @@ Inspect `assembly_line.json` and confirm:
 ## Negative-path validation
 
 Provide `0`, a negative value, text, or blank input at a numeric prompt. The command must reject the answer, prompt again, and avoid persisting an invalid contract.
+
+## Validation note
+
+The repository test suite stubs the OpenAI extraction boundary, so it runs without a
+network connection or API key. The live complete-input and partial-input commands above
+require `OPENAI_API_KEY` and were not executed in an environment without credentials.

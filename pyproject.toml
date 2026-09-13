@@ -17,6 +17,11 @@ dependencies = [
     "simpy>=4.1.2",
 ]
 
+[dependency-groups]
+dev = [
+    "pytest>=8.0.0",
+]
+
 [project.scripts]
 sdd-agentic-dt-demo = "sdd_agentic_dt_demo:main"
 

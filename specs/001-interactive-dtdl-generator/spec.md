@@ -13,8 +13,24 @@
 ### Session 2026-09-14
 
 - Q: How should the initial natural-language description enter the CLI? -> A: As a required command-line argument; `input()` is reserved for missing-parameter completion.
+- Q: How should users test and evaluate Feature 001? -> A: A local browser application is the primary workflow; the CLI remains available as a compatibility path.
 
 ## User Scenarios & Testing *(mandatory)*
+
+### User Story 0 - Generate and inspect a model in the browser (Priority: P1)
+
+As a user, I want a local webpage where I can enter an assembly-line description, complete missing values in a form, and inspect the generated contract so that I can evaluate the feature without terminal prompts or JSON editing.
+
+**Why this priority**: The browser is the primary usability and evaluation surface for Feature 001; it makes the workflow visible and understandable to users who should not need to operate a CLI.
+
+**Independent Test**: Start the local web server, open the displayed URL, submit a complete or partial description, complete any highlighted fields, and verify that the page shows the Queue and two station interfaces plus a downloadable JSON artifact.
+
+**Acceptance Scenarios**:
+
+1. **Given** the local generator page is open, **When** the user enters a complete description and selects Generate model, **Then** the page displays the validated Queue, Station1, and Station2 contract without terminal interaction.
+2. **Given** the description omits cycle times or queue capacity, **When** the user selects Generate model, **Then** the page reveals only the missing fields and keeps the workflow on the same page.
+3. **Given** the user completes the revealed fields with valid values, **When** the user selects Generate model again, **Then** the page displays the validated contract and offers the generated JSON for download.
+4. **Given** an invalid or non-positive value is entered, **When** validation occurs, **Then** the field shows an actionable error and no invalid contract is displayed or persisted.
 
 ### User Story 1 - Generate a schema from complete input (Priority: P1)
 
@@ -85,6 +101,11 @@ As a downstream simulation or dashboard consumer, I want a stable DTDL v3 schema
 - **FR-012**: The tool MUST save only a successfully validated contract to `assembly_line.json`.
 - **FR-013**: The tool MUST avoid writing a partial or invalid output when extraction, interactive validation, or contract validation fails.
 - **FR-014**: The tool MUST preserve the two-station topology of `Queue` -> `Assembly Station` -> `Packaging Station` and MUST NOT create additional stations.
+- **FR-015**: The project MUST provide a local browser application as the primary user workflow for entering descriptions, completing missing values, and evaluating the generated contract.
+- **FR-016**: The browser application MUST expose a JSON API that returns extracted parameters and missing fields without writing an incomplete contract.
+- **FR-017**: The browser application MUST validate submitted completion values with the same Pydantic models used by the CLI before generating or persisting the DTDL document.
+- **FR-018**: The browser application MUST display the generated interface names, properties, telemetry, and validation status in a readable view and provide a download action for the validated JSON.
+- **FR-019**: The CLI MUST remain available for compatibility, but browser acceptance scenarios MUST NOT depend on terminal `input()` prompts.
 
 ### Constitutional Constraints
 
@@ -100,6 +121,7 @@ As a downstream simulation or dashboard consumer, I want a stable DTDL v3 schema
 - **Queue Contract**: The interface describing queue capacity and occupancy telemetry.
 - **Station Contract**: The interface describing a station cycle time and state telemetry.
 - **Assembly Line Schema**: The validated collection of DTDL interfaces persisted as `assembly_line.json`.
+- **Browser Session**: The temporary client-side workflow state containing the original description, extracted values, missing fields, validation errors, and final contract.
 
 ## Success Criteria *(mandatory)*
 
@@ -111,6 +133,9 @@ As a downstream simulation or dashboard consumer, I want a stable DTDL v3 schema
 - **SC-004**: 100% of valid generated schemas contain exactly three required interfaces: `Queue`, `Station1`, and `Station2`.
 - **SC-005**: At least 95% of users providing valid answers complete schema generation without restarting the CLI after correcting any invalid entry.
 - **SC-006**: Invalid, incomplete, or failed runs leave no newly written invalid `assembly_line.json` artifact.
+- **SC-007**: A first-time user can start the local web server, open the browser URL, and reach the description form in under 60 seconds using the documented quickstart.
+- **SC-008**: 100% of browser submissions with valid completion values show the three-interface contract without requiring terminal input.
+- **SC-009**: 100% of browser submissions with invalid completion values show field-level errors and do not persist a new contract.
 
 ## Assumptions
 
@@ -121,3 +146,4 @@ As a downstream simulation or dashboard consumer, I want a stable DTDL v3 schema
 - `assembly_line.json` is written relative to the current working directory unless the implementation plan establishes an explicit project output location.
 - The OpenAI credential and network access required for model extraction are available at runtime.
 - Rendering and SimPy execution are downstream consumers of this generator and are not required for this CLI MVP beyond preserving the constitutional topology and contract boundary.
+- The local browser server is intended for development and evaluation on the same machine; authentication and multi-user deployment are out of scope.

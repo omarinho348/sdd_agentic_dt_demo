@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>TwinIt / DTDL Workbench</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <a class="brand" href="/" aria-label="TwinIt home">
+        <span class="brand-mark" aria-hidden="true">T</span>
+        <span><strong>TwinIt</strong><small>DTDL workbench</small></span>
+      </a>
+      <div class="local-status"><span class="status-dot"></span> Local workspace</div>
+    </header>
+
+    <main>
+      <section class="intro">
+        <p class="eyebrow">Digital twin / Assembly line</p>
+        <h1>Shape the line.<br><em>See the contract.</em></h1>
+        <p class="lede">Describe your two-station flow in plain English. TwinIt extracts the model, asks only for what is missing, and turns it into a validated DTDL document.</p>
+      </section>
+
+      <section class="workspace" aria-label="DTDL generator workspace">
+        <form id="generator-form" class="input-panel">
+          <div class="panel-heading">
+            <div><span class="step-index">01</span><h2>Describe the line</h2></div>
+            <span class="required-label">Required</span>
+          </div>
+          <label class="field-label" for="description">Assembly-line description</label>
+          <textarea id="description" name="description" rows="5" placeholder="e.g. Assembly line with station1 cycle time 5s, station2 cycle time 8s, and queue size 3" required></textarea>
+          <div class="sample-row">
+            <button type="button" id="sample-button" class="text-button">Use a sample</button>
+            <span>Plain English works best</span>
+          </div>
+
+          <div id="missing-section" class="missing-section" hidden>
+            <div class="section-rule"><span>Complete the gaps</span></div>
+            <p class="helper">The model found a few blanks. Add the values below, then generate again.</p>
+            <div id="missing-fields" class="missing-fields"></div>
+          </div>
+
+          <div class="form-footer">
+            <button id="generate-button" class="primary-button" type="submit"><span>Generate model</span><span class="button-arrow" aria-hidden="true">↗</span></button>
+            <p id="status" class="status" role="status">Ready when you are.</p>
+          </div>
+        </form>
+
+        <section class="result-panel" aria-live="polite">
+          <div class="panel-heading">
+            <div><span class="step-index">02</span><h2>Validated contract</h2></div>
+            <span id="contract-badge" class="contract-badge">Waiting</span>
+          </div>
+          <div id="empty-state" class="empty-state">
+            <div class="empty-glyph" aria-hidden="true"><span></span><span></span><span></span></div>
+            <h3>Your line will appear here</h3>
+            <p>Generate a model to inspect interfaces, properties, telemetry, and the values TwinIt understood.</p>
+          </div>
+          <div id="result-content" hidden>
+            <div id="interface-list" class="interface-list"></div>
+            <div class="result-actions">
+              <button id="download-button" class="secondary-button" type="button">Download JSON <span aria-hidden="true">↓</span></button>
+              <span class="validated-note"><span class="check-mark">✓</span> Pydantic validated</span>
+            </div>
+          </div>
+        </section>
+      </section>
+    </main>
+
+    <footer><span>DTDL v3</span><span>•</span><span>Queue → Assembly → Packaging</span><span>•</span><span>gpt-4o-mini extraction</span></footer>
+  </div>
+  <script src="/app.js"></script>
+</body>
+</html>

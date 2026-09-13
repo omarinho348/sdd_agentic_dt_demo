@@ -1,0 +1,7 @@
+{
+  "station1_name": "Assembly Station",
+  "station1_cycle_time": 5.0,
+  "station2_name": "Packaging Station",
+  "station2_cycle_time": 8.0,
+  "queue_capacity": 3
+}
