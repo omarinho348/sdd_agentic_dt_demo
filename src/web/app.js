@@ -10,9 +10,16 @@ const interfaceList = document.querySelector('#interface-list');
 const contractBadge = document.querySelector('#contract-badge');
 const downloadButton = document.querySelector('#download-button');
 const sampleButton = document.querySelector('#sample-button');
+const telemetryStatus = document.querySelector('#telemetry-status');
+const telemetryStation1 = document.querySelector('#telemetry-station1');
+const telemetryStation2 = document.querySelector('#telemetry-station2');
+const telemetryQueue = document.querySelector('#telemetry-queue');
+const telemetryTime = document.querySelector('#telemetry-time');
 
 let parameters = {};
 let latestDocument = null;
+
+connectTelemetry();
 
 const labels = {
   station1_name: ['Assembly station name', 'text', 'e.g. Assembly Station'],
@@ -163,3 +170,25 @@ downloadButton.addEventListener('click', () => {
   link.click();
   URL.revokeObjectURL(link.href);
 });
+
+function connectTelemetry() {
+  const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+  const socket = new WebSocket(`${protocol}//${window.location.host}/ws/telemetry`);
+  socket.addEventListener('open', () => {
+    telemetryStatus.textContent = 'Waiting for model';
+    telemetryStatus.classList.remove('is-valid');
+  });
+  socket.addEventListener('message', (event) => {
+    const frame = JSON.parse(event.data);
+    telemetryStation1.textContent = frame.station1_state;
+    telemetryStation2.textContent = frame.station2_state;
+    telemetryQueue.textContent = frame.queue_occupancy;
+    telemetryTime.textContent = `${frame.timestamp}s`;
+    telemetryStatus.textContent = 'Running';
+    telemetryStatus.classList.add('is-valid');
+  });
+  socket.addEventListener('close', () => {
+    telemetryStatus.textContent = 'Offline';
+    telemetryStatus.classList.remove('is-valid');
+  });
+}

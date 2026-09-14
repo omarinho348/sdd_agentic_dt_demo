@@ -155,14 +155,10 @@ class TwinItHandler(BaseHTTPRequestHandler):
 
 
 def serve(host: str = HOST, port: int = PORT) -> None:
-    server = HTTPServer((host, port), TwinItHandler)
-    print(f"TwinIt is ready at http://{host}:{port}")
-    try:
-        server.serve_forever()
-    except KeyboardInterrupt:
-        print("\nTwinIt stopped.")
-    finally:
-        server.server_close()
+    from sim_engine import create_app
+    import uvicorn
+
+    uvicorn.run(create_app(auto_start=False), host=host, port=port)
 
 
 if __name__ == "__main__":
