@@ -19,7 +19,10 @@ dependencies = [
 
 [dependency-groups]
 dev = [
+    "fastapi>=0.115.0",
     "pytest>=8.0.0",
+    "uvicorn>=0.30.0",
+    "websockets>=13.0",
 ]
 
 [project.scripts]

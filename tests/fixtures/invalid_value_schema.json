@@ -1,0 +1,5 @@
+[
+  {"@context":"dtmi:dtdl:context;3","@id":"dtmi:twinIt:Queue;1","@type":"Interface","displayName":"Queue","contents":[{"@type":"Property","name":"capacity","schema":"integer","description":"Queue capacity: 0 items"},{"@type":"Telemetry","name":"occupancy","schema":"integer"}]},
+  {"@context":"dtmi:dtdl:context;3","@id":"dtmi:twinIt:Station1;1","@type":"Interface","displayName":"Assembly Station","contents":[{"@type":"Property","name":"cycle_time","schema":"double","description":"Cycle time: 1.0 seconds"},{"@type":"Telemetry","name":"state","schema":"string"}]},
+  {"@context":"dtmi:dtdl:context;3","@id":"dtmi:twinIt:Station2;1","@type":"Interface","displayName":"Packaging Station","contents":[{"@type":"Property","name":"cycle_time","schema":"double","description":"Cycle time: 2.0 seconds"},{"@type":"Telemetry","name":"state","schema":"string"}]}
+]

@@ -68,3 +68,19 @@ uv run pytest -q
 
 See [the feature quickstart](specs/001-interactive-dtdl-generator/quickstart.md) for
 complete, partial, and negative-path examples.
+
+## Live simulation telemetry
+
+The validated `assembly_line.json` can drive the SimPy telemetry server:
+
+```powershell
+uv run python src/sim_engine.py
+```
+
+The server exposes `GET http://127.0.0.1:8000/health` and the WebSocket stream at
+`ws://127.0.0.1:8000/ws/telemetry`. Each frame contains SimPy time, both station
+states, and bounded queue occupancy. The browser workbench shows the same live values
+when it is served by the telemetry server.
+
+Feature 002 tests can be run with `uv run pytest tests/test_sim_engine.py -q`; the
+complete regression suite remains `uv run pytest -q`.

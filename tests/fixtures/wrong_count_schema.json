@@ -1,0 +1,1 @@
+[{"@context":"dtmi:dtdl:context;3","@id":"dtmi:twinIt:Queue;1","@type":"Interface","displayName":"Queue","contents":[{"@type":"Property","name":"capacity","schema":"integer","description":"Queue capacity: 2 items"},{"@type":"Telemetry","name":"occupancy","schema":"integer"}]}]
